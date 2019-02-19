@@ -1,0 +1,11 @@
+# npm
+node_modules
+
+# lib
+lib
+
+# yarn
+yarn.error.log
+
+# example
+example
