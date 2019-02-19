@@ -1,34 +1,81 @@
 import { IpadicFeatures } from 'kuromoji';
+import { includeSamePropertyValue } from './object';
 
-export interface Node extends IpadicFeatures {
+export interface Node extends IpadicFeatures, NodeProps {}
+
+export interface NodeProps {
   head: boolean;
+  tail: boolean;
 }
 
-const nodeProps = {
+export interface Ipadic2NodeOptions {
+  noHeads?: Partial<IpadicFeatures>[];
+  noTails?: Partial<IpadicFeatures>[];
+  trims?: Partial<IpadicFeatures>[];
+}
+
+const nodeProps: NodeProps = {
   head: true,
+  tail: true,
 };
-const noHeads = ['助詞', 'フィラー'];
-const trimPos = ['記号'];
-const trimWord = ['!', '?'];
 
-export const ipadic2Node = (features: IpadicFeatures[]): Node[] => {
+export const defaultIpadic2NodeOptions = {
+  noHeads: [
+    {
+      pos: '助詞',
+    },
+    {
+      pos: '助動詞',
+    },
+    {
+      pos: 'フィラー',
+    },
+  ],
+  noTails: [
+    {
+      pos: '動詞',
+      conjugated_form: '未然形',
+    },
+    {
+      pos: '接頭詞',
+    },
+  ],
+  trims: [
+    {
+      pos: '記号',
+    },
+    {
+      pos: '名詞',
+      surface_form: '!',
+    },
+    {
+      pos: '名詞',
+      surface_form: '?',
+    },
+    {
+      pos: '名詞',
+      surface_form: ')',
+    },
+  ],
+};
+
+export const ipadic2Node = (
+  features: IpadicFeatures[],
+  ipadic2NodeOptions?: Ipadic2NodeOptions
+): Node[] => {
+  const options = { ...defaultIpadic2NodeOptions, ...ipadic2NodeOptions };
+  const { noHeads, noTails, trims } = options;
+
   const nodes = features
-    .filter(
-      _feature =>
-        !trimPos.includes(_feature.pos) &&
-        !trimWord.includes(_feature.surface_form)
-    )
+    .filter(_feature => !includeSamePropertyValue(_feature as any, trims))
     .map(_feature => {
-      const { pos } = _feature;
-
       const feature = {
         ..._feature,
         ...nodeProps,
       };
 
-      if (noHeads.includes(pos)) {
-        feature.head = false;
-      }
+      feature.head = !includeSamePropertyValue(feature, noHeads);
+      feature.tail = !includeSamePropertyValue(feature, noTails);
 
       return feature;
     });

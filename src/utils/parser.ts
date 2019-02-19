@@ -5,9 +5,9 @@ export interface ParserOptions {
   exact?: boolean;
 }
 
-const defaultParserOpts = {
+export const defaultParserOpts = {
   rule: [5, 7, 5],
-  exact: true,
+  exact: false,
 };
 
 const sutekana = /[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/g;
@@ -15,8 +15,8 @@ const sutekana = /[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]/g;
 export const parser = (
   nodes: Node[],
   options?: ParserOptions
-): Node[] | undefined => {
-  let ku: Node[] = [];
+): Node[][] | undefined => {
+  let ku: Node[][] = [];
   let rulePosition = 0;
   let reading = 0;
   let fullRule = false;
@@ -26,8 +26,11 @@ export const parser = (
     ...options,
   };
 
-  const addNode = (_node: Node) => {
-    ku.push(_node);
+  const addNode = (_node: Node, index: number) => {
+    if (!ku[index]) {
+      ku[index] = [];
+    }
+    ku[index].push(_node);
   };
 
   const nextPosition = () => {
@@ -49,13 +52,16 @@ export const parser = (
     reading += _read.length;
 
     if (reading < rule[rulePosition]) {
-      addNode(node);
+      addNode(node, rulePosition);
     } else if (reading === rule[rulePosition]) {
-      addNode(node);
+      addNode(node, rulePosition);
       nextPosition();
       reset();
       if (typeof rule[rulePosition] === 'undefined') {
         fullRule = true;
+        if (!node.tail) {
+          ku = [];
+        }
         break;
       }
     } else {
@@ -73,4 +79,8 @@ export const parser = (
   }
 
   return ku;
+};
+
+export const joinNodes = (nodes: Node[][]) => {
+  return nodes.map(_node => _node.map(_nd => _nd.surface_form));
 };
