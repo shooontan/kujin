@@ -1,0 +1,25 @@
+language: node_js
+
+node_js:
+  - 10
+  - 8
+
+sudo: false
+
+cache:
+  yarn: true
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+  - export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+install:
+  - yarn
+
+jobs:
+  include:
+    - stage: test
+      script:
+        - yarn format
+        - yarn typecheck
+        - yarn test
