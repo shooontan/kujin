@@ -1,8 +1,20 @@
 {
-  "name": "ikku",
+  "name": "kujin",
   "version": "0.0.1",
   "main": "lib/index.js",
   "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "kujin",
+    "haiku",
+    "senryu"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shooontan/kujin.git"
+  },
   "scripts": {
     "build": "tsc",
     "prebuild": "rm -rf lib",

@@ -80,5 +80,9 @@ export const ipadic2Node = (
       return feature;
     });
 
+  console.log('====================================');
+  console.log(nodes);
+  console.log('====================================');
+
   return nodes;
 };
