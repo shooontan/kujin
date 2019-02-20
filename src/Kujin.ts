@@ -16,22 +16,22 @@ const defaultOptions = {
   dicPath: join(process.cwd(), 'node_modules', 'kuromoji', 'dict'),
 };
 
-export interface IkkuOptions extends Ipadic2NodeOptions, ParserOptions {
+export interface KujinOptions extends Ipadic2NodeOptions, ParserOptions {
   dicPath?: string;
 }
 
-export default class Ikku {
+export default class Kujin {
   dicPath: string;
   tokenizer: Tokenizer<IpadicFeatures> | undefined;
   ipadicOptions: Ipadic2NodeOptions;
   parserOptions: ParserOptions;
 
-  constructor(ikkuOptions?: IkkuOptions) {
+  constructor(kujinOptions?: KujinOptions) {
     const options = {
       ...defaultOptions,
       ...defaultIpadic2NodeOptions,
       ...defaultParserOpts,
-      ...ikkuOptions,
+      ...kujinOptions,
     };
 
     this.dicPath = options.dicPath;

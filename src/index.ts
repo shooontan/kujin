@@ -1,5 +1,5 @@
-import Ikku, { IkkuOptions } from './Ikku';
+import Kujin, { KujinOptions } from './Kujin';
 
-const ikku = (opts?: IkkuOptions) => new Ikku(opts);
+const kujin = (opts?: KujinOptions) => new Kujin(opts);
 
-export = ikku;
+export = kujin;

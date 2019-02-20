@@ -1,38 +1,38 @@
 import path from 'path';
-import Ikku from '../Ikku';
+import Kujin from '../Kujin';
 
 const dicPath = path.resolve(__dirname, '../../node_modules/kuromoji/dict');
 
-const ikku = new Ikku({
+const kujin = new Kujin({
   dicPath,
 });
 
 test('getTokenizer', async () => {
-  const tokenizer = await ikku.getTokenizer();
+  const tokenizer = await kujin.getTokenizer();
   expect(tokenizer).toBeDefined();
 });
 
 test('normalize', () => {
   const txt = '㌢㍍㍻';
-  const normalized = ikku['normalize'](txt);
+  const normalized = kujin['normalize'](txt);
   expect(normalized).toBe('センチメートル平成');
 });
 
 test('getNodes', async () => {
-  const nodes = await ikku['getNodes']('アルプス山脈の中腹に');
+  const nodes = await kujin['getNodes']('アルプス山脈の中腹に');
   expect(nodes).not.toHaveLength(0);
 });
 
 test('jadge', async () => {
-  const isIkku = await ikku.jadge('アタタタた　あたたたたたた　あたたたた');
-  expect(isIkku).toBeTruthy();
+  const isKu = await kujin.jadge('アタタタた　あたたたたたた　あたたたた');
+  expect(isKu).toBeTruthy();
 
-  const isNotIkku = await ikku.jadge('そこはかとなく');
-  expect(isNotIkku).toBeFalsy();
+  const isNotKu = await kujin.jadge('そこはかとなく');
+  expect(isNotKu).toBeFalsy();
 });
 
 test('find', async () => {
-  const find = await ikku.find(
+  const find = await kujin.find(
     'ああ、週末はちょっと一息つきたいな。ところでさ、今毎日がエブリデイ'
   );
   expect(find).toEqual([
@@ -43,7 +43,7 @@ test('find', async () => {
 });
 
 test('findAll', async () => {
-  const find = await ikku.findAll(
+  const find = await kujin.findAll(
     'ああ、週末はちょっと一息つきたいな。ところでさ、いま毎日がエブリデイ'
   );
   expect(find).toEqual([
