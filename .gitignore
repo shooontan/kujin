@@ -5,7 +5,10 @@ node_modules
 lib
 
 # yarn
-yarn.error.log
+yarn-error.log
 
 # example
 example
+
+# coverage
+coverage

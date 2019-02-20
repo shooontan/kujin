@@ -74,11 +74,11 @@ export const parser = (
     return undefined;
   }
 
-  if (exact && ku.length !== nodes.length) {
+  if (exact && ku.reduce((pre, cur) => pre + cur.length, 0) !== nodes.length) {
     return undefined;
   }
 
-  return ku;
+  return ku.length ? ku : undefined;
 };
 
 export const joinNodes = (nodes: Node[][]) => {
