@@ -20,6 +20,10 @@ export interface KujinOptions extends Ipadic2NodeOptions, ParserOptions {
   dicPath?: string;
 }
 
+export interface FindOptions {
+  flat?: boolean;
+}
+
 export default class Kujin {
   dicPath: string;
   tokenizer: Tokenizer<IpadicFeatures> | undefined;
@@ -84,7 +88,10 @@ export default class Kujin {
     return typeof parsedNodes !== 'undefined';
   }
 
-  async find(ku: string, opts?: Ipadic2NodeOptions & ParserOptions) {
+  async find(
+    ku: string,
+    opts?: Ipadic2NodeOptions & ParserOptions & FindOptions
+  ) {
     const nodes = await this.getNodes(ku, opts);
     let findKu: string[][] = [];
 
@@ -98,10 +105,20 @@ export default class Kujin {
       }
     }
 
+    if (opts && opts.flat) {
+      return findKu
+        .reduce((pre, cur) => {
+          return `${pre} ${cur.join('')}`;
+        }, '')
+        .trim();
+    }
     return findKu;
   }
 
-  async findAll(ku: string, opts?: ParserOptions & Ipadic2NodeOptions) {
+  async findAll(
+    ku: string,
+    opts?: ParserOptions & Ipadic2NodeOptions & FindOptions
+  ) {
     const nodes = await this.getNodes(ku, opts);
     let findAllKu: string[][][] = [];
 
@@ -112,6 +129,16 @@ export default class Kujin {
         const joinKu = joinNodes(parsedNodes);
         findAllKu.push(joinKu);
       }
+    }
+
+    if (opts && opts.flat) {
+      return findAllKu.map(_findKu =>
+        _findKu
+          .reduce((pre, cur) => {
+            return `${pre} ${cur.join('')}`;
+          }, '')
+          .trim()
+      );
     }
 
     return findAllKu;

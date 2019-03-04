@@ -42,6 +42,14 @@ test('find', async () => {
   ]);
 });
 
+test('flat find', async () => {
+  const find = await kujin.find(
+    'ああ、週末はちょっと一息つきたいな。ところでさ、今毎日がエブリデイ',
+    { flat: true }
+  );
+  expect(find).toEqual('週末は ちょっと一息 つきたいな');
+});
+
 test('findAll', async () => {
   const find = await kujin.findAll(
     'ああ、週末はちょっと一息つきたいな。ところでさ、いま毎日がエブリデイ'
@@ -50,5 +58,17 @@ test('findAll', async () => {
     [['週末', 'は'], ['ちょっと', '一息'], ['つき', 'たい', 'な']],
     [['つき', 'たい', 'な'], ['ところで', 'さ', 'いま'], ['毎日', 'が']],
     [['ところで', 'さ'], ['いま', '毎日', 'が'], ['エブリデイ']],
+  ]);
+});
+
+test('flat findAll', async () => {
+  const find = await kujin.findAll(
+    'ああ、週末はちょっと一息つきたいな。ところでさ、いま毎日がエブリデイ',
+    { flat: true }
+  );
+  expect(find).toEqual([
+    '週末は ちょっと一息 つきたいな',
+    'つきたいな ところでさいま 毎日が',
+    'ところでさ いま毎日が エブリデイ',
   ]);
 });
