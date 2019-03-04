@@ -23,12 +23,10 @@ const Kujin = require('kujin')
 const kujin = Kujin();
 
 (async () => {
-  const ku = await kujin.find('閑さや古池や蛙飛び込む水の音');
-
   /**
    * [ [ '古池', 'や' ], [ '蛙', '飛び込む' ], [ '水', 'の', '音' ] ]
    **/
-  console.log(ku);
+  const ku = await kujin.find('閑さや古池や蛙飛び込む水の音');
 })();
 ```
 
@@ -141,9 +139,12 @@ default: `[5, 7, 5]`
 
 parse rule.
 
-### kujin.find(text)
+### kujin.find(text, [options])
 
-`text` : `string`
+- `text` : `string`
+- `options` : `object`
+  - `flat` : `boolean`
+    - default is `false`
 
 find out Ku from text.
 
@@ -151,12 +152,23 @@ find out Ku from text.
 /**
  *  [ [ '古池', 'や' ], [ '蛙', '飛び込む' ], [ '水', 'の', '音' ] ]
  **/
-const ku = await kujin.find('閑さや古池や蛙飛び込む水の音')
+const ku = await kujin.find('閑さや古池や蛙飛び込む水の音');
+
+
+/**
+ *  '古池や 蛙飛び込む 水の音'
+ **/
+const ku = await kujin.find('閑さや古池や蛙飛び込む水の音', {
+  flat: true
+});
 ```
 
-### kujin.findAll(text)
+### kujin.findAll(text, [options])
 
-`text` : `string`
+- `text` : `string`
+- `optioins` : `object`
+  - `flat` : `boolean`
+    - default is `false`
 
 find out all Ku from text.
 
@@ -172,5 +184,15 @@ find out all Ku from text.
  *    ]
  *  ]
  **/
-const ku = await kujin.findAll('閑さや古池や蛙飛び込む水の音柿くへば鐘が鳴るなり法隆寺')
+const ku = await kujin.findAll('閑さや古池や蛙飛び込む水の音柿くへば鐘が鳴るなり法隆寺');
+
+/**
+ * [
+ *  '古池や 蛙飛び込む 水の音',
+ *  '柿くへば 鐘が鳴るなり 法隆寺'
+ * ]
+ **/
+const ku = await kujin.findAll('さや古池や蛙飛び込む水の音柿くへば鐘が鳴るなり法隆寺', {
+  flat: true,
+});
 ```
